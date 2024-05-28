@@ -1,0 +1,73 @@
+<html ng-app="MemoryGameApp">
+<head>
+    <title>Memory Card Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</head>
+
+<body ng-controller="MemoryGameController">
+   
+    <h1 style="background-color: azure;">Memory Card Game</h1>
+    <h2 style="background-color: whitesmoke;">A Trophy Carries Dust. Memory Last Forever !!</h2>
+    <div class="memory-board">
+        <div ng-repeat="card in cards" ng-click="flipCard(card)">
+            <div ng-if="card.flipped || card.matched" class="card-content">{{ card.value }}</div>
+            <div ng-if="!card.flipped && !card.matched" class="card-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        var app = angular.module('MemoryGameApp', []);
+
+        app.controller('MemoryGameController', function ($scope) 
+        {
+            var cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            $scope.cards = [];
+            cardValues.forEach(value => {
+                $scope.cards.push({ value, flipped: false, matched: false }, { value, flipped: false, matched: false });
+            });
+
+            $scope.cards.sort(() => Math.random() - 0.5); 
+
+            var firstFlipped = null, secondFlipped = null;
+
+            $scope.flipCard = function (card) 
+            {
+                if (!card.flipped && !$scope.isFlipping) 
+                {
+                    card.flipped = true;
+                    if (firstFlipped === null)
+                    {
+                        firstFlipped = card;
+                    } 
+                    else if (secondFlipped === null && card !== firstFlipped)
+                    {
+                        secondFlipped = card;
+                        $scope.isFlipping = true;
+                        setTimeout(checkMatch, 1000); //short delay
+                    } 
+                    else 
+                    {
+                        // Prevent clicking the same card twice quickly
+                        card.flipped = false;
+                    }
+                }
+            };
+
+            function checkMatch()
+            {
+                if (firstFlipped.value === secondFlipped.value) 
+                {
+                    firstFlipped.matched = secondFlipped.matched = true;
+                }
+                else 
+                {
+                    firstFlipped.flipped = secondFlipped.flipped = false;
+                }
+                firstFlipped = secondFlipped = null;
+                $scope.isFlipping = false;
+            };
+        });
+    </script>
+</body>
+</html>

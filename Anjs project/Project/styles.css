@@ -1,0 +1,31 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    
+    background-image: url('img1.gif');
+    background-position: center;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+}
+.card-content {
+    width: 100px;
+    height: 100px;
+    background-color:orange;
+    text-align: center;
+    line-height: 100px;
+    font-size: 30px;
+    cursor: pointer;
+}
+.card-content:hover {
+    background-color:lightgrey;
+}
